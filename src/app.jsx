@@ -1,25 +1,25 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Layout from './components/Layout';
-import Login from './pages/Login';
+import Login from './pages/login.jsx';
 
 // Dashboards
-import AdminDashboard from './pages/dashboards/AdminDashboard';
-import OperatorDashboard from './pages/dashboards/OperatorDashboard';
-import SupervisorDashboard from './pages/dashboards/SupervisorDashboard';
-import PlanningDashboard from './pages/dashboards/PlanningDashboard';
+import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
+import OperatorDashboard from './pages/dashboards/OperatorDashboard.jsx';
+import SupervisorDashboard from './pages/dashboards/SupervisorDashboard.jsx';
+import PlanningDashboard from './pages/dashboards/PlanningDashboard.jsx';
 
 // Pages
-import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
-import Machines from './pages/Machines';
-import Tasks from './pages/Tasks';
-import Outsource from './pages/Outsource';
-import Signup from './pages/Signup';
-import SignupSkills from './pages/SignupSkills';
-import UserApprovals from './pages/admin/UserApprovals';
+import Dashboard from './pages/Dashboard.jsx';
+import Users from './pages/Users.jsx';
+import Machines from './pages/Machines.jsx';
+import Tasks from './pages/Tasks.jsx';
+import Outsource from './pages/Outsource.jsx';
+import Signup from './pages/Signup.jsx';
+import SignupSkills from './pages/SignupSkills.jsx';
+import UserApprovals from './pages/admin/UserApprovals.jsx';
 
 function App() {
     return (
