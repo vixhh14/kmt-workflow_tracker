@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { getTasks, getUsers, updateTask } from '../../api/services';
-import { Users, CheckSquare, TrendingUp, AlertTriangle, Briefcase, UserPlus } from 'lucide-react';
+import { getTasks, getUsers, updateTask, getAnalytics } from '../../api/services';
+import { Users, CheckSquare, TrendingUp, AlertTriangle, Briefcase, UserPlus, Monitor } from 'lucide-react';
 import {
     BarChart, Bar,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell
 } from 'recharts';
 
+const StatCard = ({ title, value, icon: Icon, color }) => (
+    <div className="bg-white rounded-lg shadow p-6">
+        <div className="flex items-center justify-between">
+            <div>
+                <p className="text-sm text-gray-600 mb-1">{title}</p>
+                <p className="text-3xl font-bold text-gray-900">{value}</p>
+            </div>
+            <div className={`p-3 rounded-full ${color}`}>
+                <Icon className="text-white" size={24} />
+            </div>
+        </div>
+    </div>
+);
+
 const SupervisorDashboard = () => {
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
+    const [analytics, setAnalytics] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -18,12 +33,14 @@ const SupervisorDashboard = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [tasksRes, usersRes] = await Promise.all([
+            const [tasksRes, usersRes, analyticsRes] = await Promise.all([
                 getTasks(),
-                getUsers()
+                getUsers(),
+                getAnalytics()
             ]);
             setTasks(tasksRes.data);
             setUsers(usersRes.data.filter(u => u.role === 'operator'));
+            setAnalytics(analyticsRes.data);
         } catch (error) {
             console.error('Failed to fetch data:', error);
         } finally {
@@ -77,12 +94,6 @@ const SupervisorDashboard = () => {
         return <div className="text-center py-8">Loading...</div>;
     }
 
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(t => t.status === 'completed').length;
-    const pendingTasks = tasks.filter(t => t.status === 'pending').length;
-    const highPriorityTasks = tasks.filter(t => t.priority === 'high').length;
-    const inProgressTasks = tasks.filter(t => t.status === 'in_progress').length;
-
     return (
         <div className="space-y-6">
             <div>
@@ -90,44 +101,26 @@ const SupervisorDashboard = () => {
                 <p className="text-gray-600">Team oversight and task management</p>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm text-gray-600 mb-1">Total Tasks</p>
-                            <p className="text-3xl font-bold text-gray-900">{totalTasks}</p>
-                        </div>
-                        <CheckSquare className="text-blue-500" size={32} />
-                    </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm text-gray-600 mb-1">Completed</p>
-                            <p className="text-3xl font-bold text-green-600">{completedTasks}</p>
-                        </div>
-                        <TrendingUp className="text-green-500" size={32} />
-                    </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm text-gray-600 mb-1">In Progress</p>
-                            <p className="text-3xl font-bold text-blue-600">{inProgressTasks}</p>
-                        </div>
-                        <Briefcase className="text-blue-500" size={32} />
-                    </div>
-                </div>
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-sm text-gray-600 mb-1">High Priority</p>
-                            <p className="text-3xl font-bold text-red-600">{highPriorityTasks}</p>
-                        </div>
-                        <AlertTriangle className="text-red-500" size={32} />
-                    </div>
-                </div>
+            {/* Stats Cards - Matching Admin Dashboard */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <StatCard
+                    title="Active Projects"
+                    value={analytics?.active_projects_count || 0}
+                    icon={CheckSquare}
+                    color="bg-blue-500"
+                />
+                <StatCard
+                    title="Present Today"
+                    value={analytics?.attendance?.present_count || 0}
+                    icon={Users}
+                    color="bg-green-500"
+                />
+                <StatCard
+                    title="On Leave / Absent"
+                    value={analytics?.attendance?.absent_count || 0}
+                    icon={Users}
+                    color="bg-red-500"
+                />
             </div>
 
             {/* Quick Assign - Pending Tasks */}

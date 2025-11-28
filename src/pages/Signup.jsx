@@ -10,8 +10,6 @@ const Signup = () => {
         password: '',
         confirmPassword: '',
         full_name: '',
-        date_of_birth: '',
-        address: '',
         contact_number: ''
     });
     const [errors, setErrors] = useState({});
@@ -27,8 +25,6 @@ const Signup = () => {
             newErrors.confirmPassword = 'Passwords do not match';
         }
         if (!formData.full_name) newErrors.full_name = 'Full name is required';
-        if (!formData.date_of_birth) newErrors.date_of_birth = 'Date of birth is required';
-        if (!formData.address) newErrors.address = 'Address is required';
         if (!formData.contact_number) newErrors.contact_number = 'Contact number is required';
 
         setErrors(newErrors);
@@ -158,28 +154,8 @@ const Signup = () => {
                             {errors.full_name && <p className="text-red-500 text-xs mt-1">{errors.full_name}</p>}
                         </div>
 
-                        {/* Date of Birth */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Date of Birth *
-                            </label>
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Calendar className="text-gray-400" size={20} />
-                                </div>
-                                <input
-                                    type="date"
-                                    required
-                                    value={formData.date_of_birth}
-                                    onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
-                                    className={`block w-full pl-10 pr-3 py-3 border ${errors.date_of_birth ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                                />
-                            </div>
-                            {errors.date_of_birth && <p className="text-red-500 text-xs mt-1">{errors.date_of_birth}</p>}
-                        </div>
-
                         {/* Contact Number */}
-                        <div>
+                        <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Contact Number *
                             </label>
@@ -197,27 +173,6 @@ const Signup = () => {
                                 />
                             </div>
                             {errors.contact_number && <p className="text-red-500 text-xs mt-1">{errors.contact_number}</p>}
-                        </div>
-
-                        {/* Address */}
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Address *
-                            </label>
-                            <div className="relative">
-                                <div className="absolute top-3 left-0 pl-3 pointer-events-none">
-                                    <MapPin className="text-gray-400" size={20} />
-                                </div>
-                                <textarea
-                                    required
-                                    rows="3"
-                                    value={formData.address}
-                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                    className={`block w-full pl-10 pr-3 py-3 border ${errors.address ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                                    placeholder="Enter full address"
-                                />
-                            </div>
-                            {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
                         </div>
                     </div>
 

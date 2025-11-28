@@ -37,7 +37,6 @@ export const denyTask = (id, reason) => api.post(`/tasks/${id}/deny`, { reason }
 export const getAnalytics = () => api.get('/analytics/');
 
 // Outsource
-// Outsource
 export const getOutsource = () => api.get('/outsource/');
 export const createOutsource = (data) => api.post('/outsource/', data);
 export const updateOutsource = (id, data) => api.put(`/outsource/${id}`, data);
@@ -48,3 +47,4 @@ export const getPlanningTasks = () => api.get('/planning/');
 export const createPlanningTask = (data) => api.post('/planning/', data);
 export const updatePlanningTask = (id, data) => api.put(`/planning/${id}`, data);
 export const deletePlanningTask = (id) => api.delete(`/planning/${id}`);
+export const getPlanningOverview = () => api.get('/planning/overview');

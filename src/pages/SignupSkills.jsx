@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 import { Factory, ChevronDown, ChevronRight } from 'lucide-react';
 
 const SignupSkills = () => {
@@ -27,8 +27,8 @@ const SignupSkills = () => {
     const fetchData = async () => {
         try {
             const [categoriesRes, machinesRes] = await Promise.all([
-                axios.get('http://localhost:8000/api/machine-categories'),
-                axios.get('http://localhost:8000/machines')
+                api.get('/api/machine-categories'),
+                api.get('/machines')
             ]);
 
             setCategories(categoriesRes.data);
@@ -85,7 +85,7 @@ const SignupSkills = () => {
                 approval_status: 'pending'
             };
 
-            const userResponse = await axios.post('http://localhost:8000/auth/signup', userData);
+            const userResponse = await api.post('/auth/signup', userData);
             const userId = userResponse.data.user_id;
 
             // Add machine skills
@@ -94,12 +94,12 @@ const SignupSkills = () => {
                 skill_level: skillLevel
             }));
 
-            await axios.post(`http://localhost:8000/api/user-skills/${userId}/machines`, {
+            await api.post(`/api/user-skills/${userId}/machines`, {
                 machines: machineSkills
             });
 
             // Create approval record
-            await axios.post('http://localhost:8000/api/approvals', {
+            await api.post('/api/approvals', {
                 user_id: userId,
                 status: 'pending'
             });

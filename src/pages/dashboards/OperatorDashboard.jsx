@@ -92,19 +92,16 @@ const OperatorDashboard = () => {
     };
 
     const handleCompleteTask = async (taskId) => {
-        console.log('Attempting to complete task:', taskId);
-        // if (window.confirm('Are you sure you want to mark this task as completed?')) {
-        try {
-            console.log('Calling API...');
-            await completeTask(taskId);
-            console.log('API call successful');
-            alert('Task Completed Successfully!');
-            fetchTasks();
-        } catch (error) {
-            console.error('Complete task error:', error);
-            alert(error.response?.data?.detail || 'Failed to complete task');
+        if (window.confirm('Are you sure you want to mark this task as completed?')) {
+            try {
+                await completeTask(taskId);
+                alert('Task Completed Successfully!');
+                fetchTasks();
+            } catch (error) {
+                console.error('Complete task error:', error);
+                alert(error.response?.data?.detail || 'Failed to complete task');
+            }
         }
-        // }
     };
 
     const handleDenyTask = async () => {
