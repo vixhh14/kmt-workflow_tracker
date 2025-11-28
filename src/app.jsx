@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Layout from './components/Layout';
-import Login from './pages/login.jsx';
+import Login from './pages/Login.jsx';
 
 // Dashboards
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
@@ -26,10 +26,8 @@ function App() {
         <AuthProvider>
             <Routes>
                 <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/signup/skills" element={<SignupSkills />} />
 
-                {/* Role-based Dashboards - Removed vendor dashboard */}
+                {/* Role-based Dashboards */}
                 <Route path="/dashboard/admin" element={
                     <ProtectedRoute allowedRoles={['admin']}>
                         <Layout><AdminDashboard /></Layout>
@@ -58,7 +56,12 @@ function App() {
                     </ProtectedRoute>
                 }>
                     <Route index element={<Dashboard />} />
-                    <Route path="users" element={<Users />} />
+                    {/* Users page - Only accessible by admin */}
+                    <Route path="users" element={
+                        <ProtectedRoute allowedRoles={['admin']}>
+                            <Users />
+                        </ProtectedRoute>
+                    } />
                     <Route path="machines" element={<Machines />} />
                     <Route path="tasks" element={<Tasks />} />
                     {/* Outsource page - Only accessible by admin and planning */}

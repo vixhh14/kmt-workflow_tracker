@@ -36,7 +36,7 @@ const AdminDashboard = () => {
     const [tasks, setTasks] = useState([]);
     const [machines, setMachines] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    const [selectedMonth, setSelectedMonth] = useState(0);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
     useEffect(() => {
@@ -44,20 +44,45 @@ const AdminDashboard = () => {
     }, [selectedMonth, selectedYear]);
 
     const fetchData = async () => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const [analyticsRes, usersRes, tasksRes, machinesRes] = await Promise.all([
-                getAnalytics(),
-                getUsers(),
-                getTasks(selectedMonth, selectedYear),
-                getMachines()
-            ]);
-            setAnalytics(analyticsRes.data);
-            setUsers(usersRes.data);
-            setTasks(tasksRes.data);
-            setMachines(machinesRes.data);
+            // Fetch Analytics
+            try {
+                const analyticsRes = await getAnalytics();
+                setAnalytics(analyticsRes.data);
+            } catch (error) {
+                console.error('Failed to fetch analytics:', error);
+            }
+
+            // Fetch Users
+            try {
+                const usersRes = await getUsers();
+                setUsers(usersRes.data);
+            } catch (error) {
+                console.error('Failed to fetch users:', error);
+            }
+
+            // Fetch Tasks
+            try {
+                const tasksRes = await getTasks(
+                    selectedMonth === 0 ? null : selectedMonth,
+                    selectedYear === 0 ? null : selectedYear
+                );
+                setTasks(tasksRes.data);
+            } catch (error) {
+                console.error('Failed to fetch tasks:', error);
+            }
+
+            // Fetch Machines
+            try {
+                const machinesRes = await getMachines();
+                setMachines(machinesRes.data);
+            } catch (error) {
+                console.error('Failed to fetch machines:', error);
+            }
+
         } catch (error) {
-            console.error('Failed to fetch data:', error);
+            console.error('Unexpected error in fetchData:', error);
         } finally {
             setLoading(false);
         }
@@ -120,6 +145,7 @@ const AdminDashboard = () => {
     };
 
     const months = [
+        { value: 0, label: 'All Months' },
         { value: 1, label: 'January' },
         { value: 2, label: 'February' },
         { value: 3, label: 'March' },
@@ -166,6 +192,7 @@ const AdminDashboard = () => {
                         onChange={(e) => setSelectedYear(parseInt(e.target.value))}
                         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     >
+                        <option value={0}>All Years</option>
                         {[2024, 2025, 2026].map(year => (
                             <option key={year} value={year}>{year}</option>
                         ))}

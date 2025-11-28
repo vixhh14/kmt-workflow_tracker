@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getMachines, createMachine, deleteMachine } from '../api/services';
-import { Plus, Trash2, Monitor, Search, X } from 'lucide-react';
+import { getMachines, createMachine, updateMachine, deleteMachine } from '../api/services';
+import { Plus, Trash2, Monitor, Search, X, Edit2 } from 'lucide-react';
 
 const Machines = () => {
     const [machines, setMachines] = useState([]);
@@ -57,6 +57,16 @@ const Machines = () => {
                 console.error('Failed to delete machine:', error);
                 alert('Failed to delete machine');
             }
+        }
+    };
+
+    const handleStatusUpdate = async (machineId, newStatus) => {
+        try {
+            await updateMachine(machineId, { status: newStatus });
+            fetchMachines(); // Refresh the list to show updated data
+        } catch (error) {
+            console.error('Failed to update machine status:', error);
+            alert('Failed to update machine status');
         }
     };
 
@@ -262,11 +272,17 @@ const Machines = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <div className="flex justify-between text-sm">
+                            <div className="flex justify-between text-sm items-center">
                                 <span className="text-gray-600">Status:</span>
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getStatusColor(machine.status)}`}>
-                                    {machine.status}
-                                </span>
+                                <select
+                                    value={machine.status}
+                                    onChange={(e) => handleStatusUpdate(machine.id, e.target.value)}
+                                    className={`px-2 py-0.5 rounded-full text-xs font-semibold border-none focus:ring-2 focus:ring-blue-500 cursor-pointer ${getStatusColor(machine.status)}`}
+                                >
+                                    <option value="active" className="bg-white text-gray-900">Active</option>
+                                    <option value="maintenance" className="bg-white text-gray-900">Maintenance</option>
+                                    <option value="offline" className="bg-white text-gray-900">Offline</option>
+                                </select>
                             </div>
                             {machine.location && (
                                 <div className="flex justify-between text-sm">

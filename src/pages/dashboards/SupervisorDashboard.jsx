@@ -184,6 +184,7 @@ const SupervisorDashboard = () => {
                 {/* Operator-wise Status */}
                 <div className="bg-white rounded-lg shadow p-6">
                     <h3 className="text-lg font-semibold mb-4">Operator-wise Task Status</h3>
+                    <p className="text-sm text-gray-600 mb-4">Track each operator's work progress and task distribution</p>
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={getOperatorStatus()}>
                             <CartesianGrid strokeDasharray="3 3" />
@@ -191,10 +192,10 @@ const SupervisorDashboard = () => {
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey="completed" fill="#10b981" name="Completed" />
-                            <Bar dataKey="inProgress" fill="#3b82f6" name="In Progress" />
-                            <Bar dataKey="pending" fill="#f59e0b" name="Pending" />
-                            <Bar dataKey="onHold" fill="#ef4444" name="On Hold" />
+                            <Bar dataKey="completed" stackId="a" fill="#10b981" name="Completed" />
+                            <Bar dataKey="inProgress" stackId="a" fill="#3b82f6" name="In Progress" />
+                            <Bar dataKey="pending" stackId="a" fill="#f59e0b" name="Pending" />
+                            <Bar dataKey="onHold" stackId="a" fill="#ef4444" name="On Hold" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

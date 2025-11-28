@@ -11,10 +11,13 @@ const Layout = ({ children }) => {
     // Check if we're on a role-specific dashboard
     const isRoleDashboard = location.pathname.startsWith('/dashboard/');
 
-    // Navigation items - Outsource only visible to admin and planning
+    // Navigation items - Users only visible to admin, Outsource only to admin and planning
     const navItems = [
         { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-        { path: '/users', label: 'Users', icon: Users },
+        // Users only for admin
+        ...(user?.role === 'admin'
+            ? [{ path: '/users', label: 'Users', icon: Users }]
+            : []),
         { path: '/machines', label: 'Machines', icon: Monitor },
         { path: '/tasks', label: 'Tasks', icon: CheckSquare },
         // Outsource only for admin and planning
